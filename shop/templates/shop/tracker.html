@@ -1,0 +1,114 @@
+{% extends 'shop/basic.html' %}
+{% block title%} Tracker{% endblock %}
+{% block body %} 
+
+<!-- <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+
+</div>
+ --> 
+    <div class="my-4">
+        </div>
+    <div class="col my-8 cover-container d-flex w-100 h-500 p-3 mx-auto flex-column text-left text-white bg-dark" >
+
+        <form method="post" action="#" id = "trackerForm">{% csrf_token %}
+            <div class="form-row" >
+                <div class="form-group col-8">
+                    <label for="order_id">OrderId</label>
+                    <input type="name" name = "order_id" class="form-control" id="order_id" placeholder="Order Id">
+                </div>
+                <div class="form-group col-8">
+                    <label for="emailUser">Email</label>
+                    <input type="email" name="emailUser" class="form-control" id="emailUser" placeholder="Email">
+                </div>
+            </div>
+
+      <button type ="submit" class="btn btn-lg btn-secondary fw-bold border-white bg-dark">Track Your Order</button>
+    <div class="col my-4">
+        <h2> Order Status : </h2>
+        <div class="my-4">
+            <ul class="list-group" id="items">
+                Enter your order Id and Email and click Track Order to find details about your order!
+            </ul>
+        </div>
+    </div>
+    <div class="col my-4">
+        <div class="my-4">
+            <h2> Your Items : </h2>
+            <ul class="list-group" id="citems">
+            </ul>
+        </div>
+    </div>    
+        </form>
+    </div>
+</body>
+{% endblock %}
+
+{% block js %}
+<script>
+
+$('#trackerForm').submit(function(event){
+    $('#items').empty();
+    
+    var formdata = {
+        'order_id' : $('input[name=order_id]').val(),
+        'emailUser' : $('input[name=emailUser]').val(),
+        'csrfmiddlewaretoken' : $('input[name = csrfmiddlewaretoken]').val()
+    };
+    $.ajax({
+        type:'POST',
+        url:'/shop/tracker/',
+        data: formdata,
+        encode : true
+    })
+    .done(function(data){
+        $('#citems').empty();
+        console.log(data)
+        data = JSON.parse(data);
+        console.log(data)        
+        if (data['status']=='success') {
+            updates = data['updates'];
+            for (i = 0; i < updates.length; i++) {
+                let text = updates[i]['text'];
+                let time = updates[i]['time'];
+                mystr = `<li class="list-group-item d-flex justify-content-between align-items-center fw-bold border-white bg-dark">
+                ${text}
+                <span class="badge badge-primary badge-pill">${time}</span>
+            </li>`
+                $('#items').append(mystr)
+            }
+            //Order details
+            cart = JSON.parse(data['itemsJson']);
+            for (item in cart) {
+                let name = cart[item][1];
+                let qty = cart[item][0];
+                mystr = `<li class="list-group-item d-flex justify-content-between align-items-center fw-bold border-white text-white bg-dark">
+                   ${name}
+                    <span class="badge badge-primary badge-pill">${qty}</span>
+                </li>`
+                $('#citems').append(mystr);
+            }
+                        console.log("cuscc")
+        
+        }
+        else
+        {
+                 
+            console.log(data['status']);
+            mystr = `<li class="list-group-item d-flex justify-content-between align-items-center fw-bold border-white text-white bg-dark">
+                    Sorry, We are not able to fetch this Order Items. Make sure to type correct order Id and email</li>`
+
+            mystr1 = `<li class="list-group-item d-flex justify-content-between align-items-center fw-bold border-white text-white bg-dark">
+                    Sorry, We are not able to fetch this Order Status. Make sure to type correct order Id and email</li>`
+
+            $('#items').append(mystr1);
+            $('#citems').append(mystr);
+        } 
+
+    });
+    event.preventDefault();
+}); 
+</script>
+{% endblock %}
+
+
+

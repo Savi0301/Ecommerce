@@ -1,0 +1,39 @@
+{% extends 'shop/basic.html' %}
+{% block title %}About{% endblock %}
+
+{% block body %}
+<body>
+<div class="container">
+  <main>
+  <h1 class="visually-hidden"></h1>
+
+  <div class="bg-dark text-secondary px-4 py-5 text-center">
+    <div class="py-5">
+      <h1 class="display-5 fw-bold text-white">About Me</h1>
+      <h2 class="fs-5 mb-4">Savita N</h2>
+      <div class="col-lg-6 mx-auto">
+        <p id = "viewmore" class="fs-5 mb-4" >Software Engineer, experienced in automations development using....</p>
+        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+          <button type="button" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold mr-2" onclick= "viewmore()">View More</button>
+          <a type="button" href="mailto:savita.navalgi9736@gmail.com" class="btn btn-outline-info btn-lg px-4 me-sm-3 fw-bold mr-2">Send Email</a>
+         
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="b-example-divider mb-0"></div>
+</main>
+
+</div>
+</body>
+{% endblock %}
+{% block js %}
+<script type="text/javascript">
+  function viewmore(){
+    document.getElementById("viewmore").innerHTML = "Software Engineer, experienced in automations development using RPA technologies such as Python, Selenium, Uipath, Blueprism. Certified RPA developer at Uipath & Blueprism University, Certified Oracle Cloud Infrastructure Associate"
+  }
+</script>
+{% endblock %}
+
+
